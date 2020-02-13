@@ -1,0 +1,42 @@
+# ingka-group-digital/customer-support-returns:.github/settings.yml
+repository:
+  # See https://developer.github.com/v3/repos/#edit for all available settings.
+  name: data-foundation
+  description: The customer support data foundation repo. Mono repo containing various services for handling the data foundation.
+  topics: customer-support, csr, isx, data-foundation
+
+labels:
+  - name: wip
+    color: A83944
+    description: Used to block in progress PRs from being merged.
+  - name: maintenance
+    color: 6BA890
+    description: General repo maintenance / configuration
+  - name: documentation
+    color: C9C086
+    description: Documentation changes
+  - name: ci
+    color: E8A4BC
+    description: Changes related to automation
+  - name: infrastructure
+    color: F4B7F4
+    description: Changes made to project infrastructure
+
+  - name: data-ingester
+    color: CEDAE5
+    description: Changes made to the data ingester service
+  - name: derived-data-api
+    color: B7CEE5
+    description: Changes made to the derived data API service
+  - name: event-processor
+    color: A0C3E5
+    description: Changes made to the event processor service
+  - name: event-publisher
+    color: 89B7E5
+    description: Changes made to the event publisher service
+  - name: raw-data-api
+    color: 72ACE5
+    description: Changes made to the raw data API service
+  - name: rest-api
+    color: 5BA0E5
+    description: Changes made to the REST API service
