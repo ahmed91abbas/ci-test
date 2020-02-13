@@ -193,22 +193,6 @@ jobs:
       - name: Test
         run: make -C ${{ matrix.image }} test
 
-  project-checks-tf:
-    name: Project Specific Checks (terraform)
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        module:
-          - permissions
-          - infrastructure
-          - services
-    steps:
-      - uses: actions/checkout@master
-      - name: Lint
-        run: |
-          cd terraform && \
-          make lint TERRAFORM_MODULE_PATH=$(realpath ./${{ matrix.module }}/)
-
   project-done:
     name: Done
     runs-on: ubuntu-latest
