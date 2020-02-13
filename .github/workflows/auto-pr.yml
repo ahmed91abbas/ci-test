@@ -1,0 +1,36 @@
+name: Create WIP PR
+
+on:
+  push:
+    branches:
+    - "feature/*"
+    - "bugfix/*"
+    - "release/*"
+    - "rfc/*"
+
+jobs:
+  auto-pull-request-feature:
+    name: Auto PR Feature
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        type:
+          - feature
+          - bugfix
+          - release
+          - rfc
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=id;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: pr-id
+      - name: pull-request-action
+        uses: vsoch/pull-request-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_PREFIX: ${{ matrix.type }}/
+          PULL_REQUEST_BRANCH: "master"
+          PULL_REQUEST_TITLE: "Merge [${{ matrix.type }}] ${{ steps.pr-id.outputs.id }} into master"
+          PULL_REQUEST_BODY: |
+            An automated feature PR has been created. Once complete remove
+            the `wip` tag from the right
