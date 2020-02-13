@@ -1,210 +1,210 @@
 # http://patorjk.com/software/taag/#p=display&f=ANSI%20Shadow&t=test
 
-name: Extract branch name
-  shell: bash
-  run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  id: extract_branch
+- name: Extract branch name
+    shell: bash
+    run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+    id: extract_branch
 
 
-name: Continuous Integration
+- name: Continuous Integration
 
-on:
-  push:
-    branches:
-      - eng:${{ steps.extract_branch.outputs.branch }}
-  pull_request:
-    branches:
-      - master
+  on:
+    push:
+      branches:
+        - eng:${{ steps.extract_branch.outputs.branch }}
+    pull_request:
+      branches:
+        - master
 
-jobs:
-  #############################################################################
-  #
-  # ███████╗██╗██╗     ███████╗    ██████╗ ███████╗██╗      █████╗ ████████╗███████╗██████╗
-  # ██╔════╝██║██║     ██╔════╝    ██╔══██╗██╔════╝██║     ██╔══██╗╚══██╔══╝██╔════╝██╔══██╗
-  # █████╗  ██║██║     █████╗      ██████╔╝█████╗  ██║     ███████║   ██║   █████╗  ██║  ██║
-  # ██╔══╝  ██║██║     ██╔══╝      ██╔══██╗██╔══╝  ██║     ██╔══██║   ██║   ██╔══╝  ██║  ██║
-  # ██║     ██║███████╗███████╗    ██║  ██║███████╗███████╗██║  ██║   ██║   ███████╗██████╔╝
-  # ╚═╝     ╚═╝╚══════╝╚══════╝    ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝
-  #
-  #############################################################################
-  file-lint:
-    name: General File Lint
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        command:
-          - cr
-          - crlf
-          - trailing-newline
-          - trailing-single-newline
-          - trailing-space
-          - utf8
-          - utf8-bom
-    steps:
-      - uses: actions/checkout@master
-      - uses: dogmatic69/actions/file/lint/awesome-ci@master
-        with:
-          command: file-${{ matrix.command }}
+  jobs:
+    #############################################################################
+    #
+    # ███████╗██╗██╗     ███████╗    ██████╗ ███████╗██╗      █████╗ ████████╗███████╗██████╗
+    # ██╔════╝██║██║     ██╔════╝    ██╔══██╗██╔════╝██║     ██╔══██╗╚══██╔══╝██╔════╝██╔══██╗
+    # █████╗  ██║██║     █████╗      ██████╔╝█████╗  ██║     ███████║   ██║   █████╗  ██║  ██║
+    # ██╔══╝  ██║██║     ██╔══╝      ██╔══██╗██╔══╝  ██║     ██╔══██║   ██║   ██╔══╝  ██║  ██║
+    # ██║     ██║███████╗███████╗    ██║  ██║███████╗███████╗██║  ██║   ██║   ███████╗██████╔╝
+    # ╚═╝     ╚═╝╚══════╝╚══════╝    ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝
+    #
+    #############################################################################
+    file-lint:
+      name: General File Lint
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          command:
+            - cr
+            - crlf
+            - trailing-newline
+            - trailing-single-newline
+            - trailing-space
+            - utf8
+            - utf8-bom
+      steps:
+        - uses: actions/checkout@master
+        - uses: dogmatic69/actions/file/lint/awesome-ci@master
+          with:
+            command: file-${{ matrix.command }}
 
-  makefile-lint:
-    name: Makefile Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: dogmatic69/actions/file/lint/checkmake@master
+    makefile-lint:
+      name: Makefile Lint
+      runs-on: ubuntu-latest
+      steps:
+        - uses: dogmatic69/actions/file/lint/checkmake@master
 
-  file-done:
-    name: Done
-    runs-on: ubuntu-latest
-    needs: [file-lint, makefile-lint]
-    steps:
-      - run: true
+    file-done:
+      name: Done
+      runs-on: ubuntu-latest
+      needs: [file-lint, makefile-lint]
+      steps:
+        - run: true
 
-  #############################################################################
-  #
-  #  ██████╗ ██╗████████╗    ██████╗ ███████╗██╗      █████╗ ████████╗███████╗██████╗
-  # ██╔════╝ ██║╚══██╔══╝    ██╔══██╗██╔════╝██║     ██╔══██╗╚══██╔══╝██╔════╝██╔══██╗
-  # ██║  ███╗██║   ██║       ██████╔╝█████╗  ██║     ███████║   ██║   █████╗  ██║  ██║
-  # ██║   ██║██║   ██║       ██╔══██╗██╔══╝  ██║     ██╔══██║   ██║   ██╔══╝  ██║  ██║
-  # ╚██████╔╝██║   ██║       ██║  ██║███████╗███████╗██║  ██║   ██║   ███████╗██████╔╝
-  #  ╚═════╝ ╚═╝   ╚═╝       ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝
-  #
-  #############################################################################
-  git-lint:
-    name: Git Lint
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        command:
-          - conflicts
-          - ignored
-    steps:
-      - uses: actions/checkout@master
-        with:
-          fetch-depth: 0
-      - uses: dogmatic69/actions/git/lint/awesome-ci@master
-        with:
-          command: git-${{ matrix.command }}
+    #############################################################################
+    #
+    #  ██████╗ ██╗████████╗    ██████╗ ███████╗██╗      █████╗ ████████╗███████╗██████╗
+    # ██╔════╝ ██║╚══██╔══╝    ██╔══██╗██╔════╝██║     ██╔══██╗╚══██╔══╝██╔════╝██╔══██╗
+    # ██║  ███╗██║   ██║       ██████╔╝█████╗  ██║     ███████║   ██║   █████╗  ██║  ██║
+    # ██║   ██║██║   ██║       ██╔══██╗██╔══╝  ██║     ██╔══██║   ██║   ██╔══╝  ██║  ██║
+    # ╚██████╔╝██║   ██║       ██║  ██║███████╗███████╗██║  ██║   ██║   ███████╗██████╔╝
+    #  ╚═════╝ ╚═╝   ╚═╝       ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝
+    #
+    #############################################################################
+    git-lint:
+      name: Git Lint
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          command:
+            - conflicts
+            - ignored
+      steps:
+        - uses: actions/checkout@master
+          with:
+            fetch-depth: 0
+        - uses: dogmatic69/actions/git/lint/awesome-ci@master
+          with:
+            command: git-${{ matrix.command }}
 
-  gitleaks:
-    name: GitLeaks
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-        with:
-          fetch-depth: 0
-      - uses: dogmatic69/actions/git/audit/gitleaks@master
+    gitleaks:
+      name: GitLeaks
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@master
+          with:
+            fetch-depth: 0
+        - uses: dogmatic69/actions/git/audit/gitleaks@master
 
-  git-done:
-    name: Done
-    runs-on: ubuntu-latest
-    needs: [git-lint, gitleaks]
-    steps:
-      - run: true
+    git-done:
+      name: Done
+      runs-on: ubuntu-latest
+      needs: [git-lint, gitleaks]
+      steps:
+        - run: true
 
-  #############################################################################
-  #
-  # ██████╗  ██████╗  ██████╗██╗  ██╗███████╗██████╗     ██████╗ ███████╗██╗      █████╗ ████████╗███████╗██████╗
-  # ██╔══██╗██╔═══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗    ██╔══██╗██╔════╝██║     ██╔══██╗╚══██╔══╝██╔════╝██╔══██╗
-  # ██║  ██║██║   ██║██║     █████╔╝ █████╗  ██████╔╝    ██████╔╝█████╗  ██║     ███████║   ██║   █████╗  ██║  ██║
-  # ██║  ██║██║   ██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗    ██╔══██╗██╔══╝  ██║     ██╔══██║   ██║   ██╔══╝  ██║  ██║
-  # ██████╔╝╚██████╔╝╚██████╗██║  ██╗███████╗██║  ██║    ██║  ██║███████╗███████╗██║  ██║   ██║   ███████╗██████╔╝
-  # ╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝    ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝
-  #
-  #############################################################################
+    #############################################################################
+    #
+    # ██████╗  ██████╗  ██████╗██╗  ██╗███████╗██████╗     ██████╗ ███████╗██╗      █████╗ ████████╗███████╗██████╗
+    # ██╔══██╗██╔═══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗    ██╔══██╗██╔════╝██║     ██╔══██╗╚══██╔══╝██╔════╝██╔══██╗
+    # ██║  ██║██║   ██║██║     █████╔╝ █████╗  ██████╔╝    ██████╔╝█████╗  ██║     ███████║   ██║   █████╗  ██║  ██║
+    # ██║  ██║██║   ██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗    ██╔══██╗██╔══╝  ██║     ██╔══██║   ██║   ██╔══╝  ██║  ██║
+    # ██████╔╝╚██████╔╝╚██████╗██║  ██╗███████╗██║  ██║    ██║  ██║███████╗███████╗██║  ██║   ██║   ███████╗██████╔╝
+    # ╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝    ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝
+    #
+    #############################################################################
 
-  audit-trivy:
-    name: Trivy Scan
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        image:
-          - box-sum
-    steps:
-      - uses: actions/checkout@master
-      - name: build
-        run: docker build -t ${{ matrix.image }} ./${{ matrix.image }}
-      - uses: dogmatic69/actions/docker/audit/trivy@master
-        with:
-          image: ${{ matrix.image }}
-          path: ./${{ matrix.image }}
+    audit-trivy:
+      name: Trivy Scan
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          image:
+            - box-sum
+      steps:
+        - uses: actions/checkout@master
+        - name: build
+          run: docker build -t ${{ matrix.image }} ./${{ matrix.image }}
+        - uses: dogmatic69/actions/docker/audit/trivy@master
+          with:
+            image: ${{ matrix.image }}
+            path: ./${{ matrix.image }}
 
-  lint-hadolint:
-    name: Hadolint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - uses: dogmatic69/actions/docker/lint/hadolint@master
+    lint-hadolint:
+      name: Hadolint
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@master
+        - uses: dogmatic69/actions/docker/lint/hadolint@master
 
-  docker-done:
-    name: Done
-    runs-on: ubuntu-latest
-    needs: [audit-trivy, lint-hadolint]
-    steps:
-      - run: true
-
-
-  #############################################################################
-  #
-  # ██████╗ ██╗   ██╗██████╗ ██╗     ██╗███████╗██╗  ██╗
-  # ██╔══██╗██║   ██║██╔══██╗██║     ██║██╔════╝██║  ██║
-  # ██████╔╝██║   ██║██████╔╝██║     ██║███████╗███████║
-  # ██╔═══╝ ██║   ██║██╔══██╗██║     ██║╚════██║██╔══██║
-  # ██║     ╚██████╔╝██████╔╝███████╗██║███████║██║  ██║
-  # ╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝╚══════╝╚═╝  ╚═╝
-  #
-  #############################################################################
-  # publish:
-  #   name: Code Publish
-  #   runs-on: ubuntu-latest
-  #   needs: [file-done, git-done, docker-done, project-done]
-  #   strategy:
-  #     matrix:
-  #       component:
-  #         - box-data-ingester
-  #         - box-derived-data-api
-  #         - box-event-publisher
-  #         - box-raw-data-api
-  #         - box-rest-api
-  #         - box-historical-data-preprocessor
-  #         - box-historical-data-importer
-  #   steps:
-  #   - uses: actions/checkout@master
-  #   - name: publish the package
-  #     run: |
-  #       cd ${{ matrix.component }}
-  #       DOCKER_SERVICE=${{ matrix.component }} \
-  #       DOCKER_TOKEN=${{ secrets.GITHUB_TOKEN }} \
-  #       DOCKER_USER=${{ github.actor }} \
-  #         make publish
+    docker-done:
+      name: Done
+      runs-on: ubuntu-latest
+      needs: [audit-trivy, lint-hadolint]
+      steps:
+        - run: true
 
 
-  #############################################################################
-  #
-  # ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗
-  # ██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝
-  # ██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║
-  # ██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║
-  # ██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║
-  # ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝
-  #
-  #############################################################################
-  project-checks:
-    name: Project Specific Checks
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        image:
-          - box-sum
-    steps:
-      - uses: actions/checkout@master
-      - name: Lint
-        run: make -C ${{ matrix.image }} lint
-      - name: Test
-        run: make -C ${{ matrix.image }} test
+    #############################################################################
+    #
+    # ██████╗ ██╗   ██╗██████╗ ██╗     ██╗███████╗██╗  ██╗
+    # ██╔══██╗██║   ██║██╔══██╗██║     ██║██╔════╝██║  ██║
+    # ██████╔╝██║   ██║██████╔╝██║     ██║███████╗███████║
+    # ██╔═══╝ ██║   ██║██╔══██╗██║     ██║╚════██║██╔══██║
+    # ██║     ╚██████╔╝██████╔╝███████╗██║███████║██║  ██║
+    # ╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝╚══════╝╚═╝  ╚═╝
+    #
+    #############################################################################
+    # publish:
+    #   name: Code Publish
+    #   runs-on: ubuntu-latest
+    #   needs: [file-done, git-done, docker-done, project-done]
+    #   strategy:
+    #     matrix:
+    #       component:
+    #         - box-data-ingester
+    #         - box-derived-data-api
+    #         - box-event-publisher
+    #         - box-raw-data-api
+    #         - box-rest-api
+    #         - box-historical-data-preprocessor
+    #         - box-historical-data-importer
+    #   steps:
+    #   - uses: actions/checkout@master
+    #   - name: publish the package
+    #     run: |
+    #       cd ${{ matrix.component }}
+    #       DOCKER_SERVICE=${{ matrix.component }} \
+    #       DOCKER_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+    #       DOCKER_USER=${{ github.actor }} \
+    #         make publish
 
-  project-done:
-    name: Done
-    runs-on: ubuntu-latest
-    needs: [project-checks]
-    steps:
-      - run: true
+
+    #############################################################################
+    #
+    # ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗
+    # ██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝
+    # ██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║
+    # ██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║
+    # ██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║
+    # ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝
+    #
+    #############################################################################
+    project-checks:
+      name: Project Specific Checks
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          image:
+            - box-sum
+      steps:
+        - uses: actions/checkout@master
+        - name: Lint
+          run: make -C ${{ matrix.image }} lint
+        - name: Test
+          run: make -C ${{ matrix.image }} test
+
+    project-done:
+      name: Done
+      runs-on: ubuntu-latest
+      needs: [project-checks]
+      steps:
+        - run: true
