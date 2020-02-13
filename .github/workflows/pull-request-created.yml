@@ -2,8 +2,6 @@ name: Continuous Integration
 
 on:
   push:
-    branches:
-      - eng:${{ steps.extract_branch.outputs.branch }}
   pull_request:
     branches:
       - master
