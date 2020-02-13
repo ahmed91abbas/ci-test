@@ -26,26 +26,5 @@ documentation:
 # Project Specific
 #
 ###############################################################################
-data-ingester:
-  - box-data-ingester/**
-
-derived-data-api:
-  - box-derived-data-api/**
-
-event-processor:
-  - box-event-processor/**
-
-event-publisher:
-  - box-event-publisher/**
-
-raw-data-api:
-  - box-raw-data-api/**
-
-rest-api:
-  - box-rest-api/**
-
-historical-data-preprocessor:
-  - box-historical-data-preprocessor/**
-
-historical-data-importer:
-  - box-historical-data-importer/**
+sum:
+  - box-main-sum/**

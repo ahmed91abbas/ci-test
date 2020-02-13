@@ -109,14 +109,7 @@ jobs:
     strategy:
       matrix:
         image:
-          - box-data-ingester
-          - box-derived-data-api
-          - box-event-processor
-          - box-event-publisher
-          - box-raw-data-api
-          - box-rest-api
-          - box-historical-data-preprocessor
-          - box-historical-data-importer
+          - box-sum
     steps:
       - uses: actions/checkout@master
       - name: build
@@ -192,14 +185,7 @@ jobs:
     strategy:
       matrix:
         image:
-          - box-data-ingester
-          - box-derived-data-api
-          - box-event-processor
-          - box-event-publisher
-          - box-raw-data-api
-          - box-rest-api
-          - box-historical-data-preprocessor
-          - box-historical-data-importer
+          - box-sum
     steps:
       - uses: actions/checkout@master
       - name: Lint
