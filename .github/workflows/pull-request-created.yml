@@ -196,6 +196,6 @@ jobs:
   project-done:
     name: Done
     runs-on: ubuntu-latest
-    needs: [project-checks, project-checks-tf]
+    needs: [project-checks]
     steps:
       - run: true
