@@ -4,6 +4,15 @@ on:
   - push
 
 jobs:
+  name: list files
+    run: |
+      echo ${GITHUB_REPOSITORY}
+      URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
+      FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
+      echo $FILES
+
+# https://api.github.com/repos/ahmed91abbas/ci-test/pulls/10/files
+
   ###########################################################################
   #
   # ███████╗██╗██╗     ███████╗    ██████╗ ███████╗██╗      █████╗ ████████╗███████╗██████╗
