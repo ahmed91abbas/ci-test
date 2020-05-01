@@ -160,7 +160,7 @@ jobs:
 
       - name: list files
         run: |
-          PR_NUMBER=$(echo ${{ github.ref	}} | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          PR_NUMBER=$(echo ${{ github.event_name.pull_request	}})
           URL="https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER/files"
           echo $URL
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
