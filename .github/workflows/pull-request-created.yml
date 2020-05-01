@@ -141,28 +141,27 @@ jobs:
   #
   #############################################################################
   project-checks:
-    - name: get changed files
-      id: getfile
-      run: |
-        echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | xargs)"
+    name: Project Specific Checks
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - box-sum
+          - box-two
+    steps:
+      - name: get changed files
+        id: getfile
+        run: |
+          echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | xargs)"
 
-    - name: echo output
-      run: |
-        echo ${{ steps.getfile.outputs.files }}
-
-    - name: Project Specific Checks
-        runs-on: ubuntu-latest
-        strategy:
-          matrix:
-            image:
-              - box-sum
-              - box-two
-        steps:
-          - uses: actions/checkout@master
-          - name: Lint
-            run: make -C ${{ matrix.image }} lint
-          - name: Test
-            run: make -C ${{ matrix.image }} test
+      - name: echo output
+        run: |
+          echo ${{ steps.getfile.outputs.files }}
+      - uses: actions/checkout@master
+      - name: Lint
+        run: make -C ${{ matrix.image }} lint
+      - name: Test
+        run: make -C ${{ matrix.image }} test
 
   project-done:
     name: Done
