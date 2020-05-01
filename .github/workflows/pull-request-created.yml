@@ -161,8 +161,9 @@ jobs:
       - name: list files
         run: |
           URL="https://api.github.com/repos/ahmed91abbas/${GITHUB_REPOSITORY}/pulls/11/files"
-          FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
-          echo $FILES
+          echo $URL
+          # FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
+          # echo $FILES
       # - uses: actions/checkout@master
       # - name: Lint
       #   run: make -C ${{ matrix.image }} lint
