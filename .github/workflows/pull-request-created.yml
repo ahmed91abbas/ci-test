@@ -157,6 +157,12 @@ jobs:
       - name: echo output
         run: |
           echo ${{ steps.getfile.outputs.files }}
+
+      - name: list files
+        run: |
+          URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
+          FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
+          echo $FILES
       # - uses: actions/checkout@master
       # - name: Lint
       #   run: make -C ${{ matrix.image }} lint
