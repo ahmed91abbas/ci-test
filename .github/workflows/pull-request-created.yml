@@ -155,7 +155,7 @@ jobs:
           URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
           echo "::set-output name=files::$FILES"
-          echo "::set-output name=files::box-sum"
+          echo "::set-output name=files::box-sum box-two"
       - uses: actions/checkout@master
       - name: Lint
         run: |
