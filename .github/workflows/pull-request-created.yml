@@ -158,14 +158,18 @@ jobs:
                   result=$result" "$name
               fi
           done
-          echo $result
           echo "::set-output name=boxes::$result"
 
       - uses: actions/checkout@master
       - name: Lint
         run: |
-          echo ${{steps.list_files.outputs.boxes}}
           for box in ${{steps.list_files.outputs.boxes}}
           do
             make -C $box lint
+          done
+      - name: Test
+        run: |
+          for box in ${{steps.list_files.outputs.boxes}}
+          do
+            make -C $box test
           done
