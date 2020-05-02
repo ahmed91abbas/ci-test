@@ -10,30 +10,31 @@ jobs:
     steps:
       - name: list files
         id: list_files
-        run: |
-          URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
-          FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
-          regex="(box-[0-9a-z]*)"
-          for f in $FILES
-          do
-              if [[ $f =~ $regex ]]
-              then
-                  name="${BASH_REMATCH[1]}"
-                  result=$result" "$name
-              fi
-          done
-          echo "::set-output name=boxes::$result"
+        run: echo ${{ github.base_ref }}
+      #   run: |
+      #     URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
+      #     FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
+      #     regex="(box-[0-9a-z]*)"
+      #     for f in $FILES
+      #     do
+      #         if [[ $f =~ $regex ]]
+      #         then
+      #             name="${BASH_REMATCH[1]}"
+      #             result=$result" "$name
+      #         fi
+      #     done
+      #     echo "::set-output name=boxes::$result"
 
-      - uses: actions/checkout@master
-      - name: Lint
-        run: |
-          for box in ${{steps.list_files.outputs.boxes}}
-          do
-            make -C $box lint
-          done
-      - name: Test
-        run: |
-          for box in ${{steps.list_files.outputs.boxes}}
-          do
-            make -C $box test
-          done
+      # - uses: actions/checkout@master
+      # - name: Lint
+      #   run: |
+      #     for box in ${{steps.list_files.outputs.boxes}}
+      #     do
+      #       make -C $box lint
+      #     done
+      # - name: Test
+      #   run: |
+      #     for box in ${{steps.list_files.outputs.boxes}}
+      #     do
+      #       make -C $box test
+      #     done
