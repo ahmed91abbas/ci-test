@@ -154,6 +154,19 @@ jobs:
           do
             echo $VARIABLE
           done
+
+          files="*.jpg"
+          regex="(box-*)/*"
+          for f in $files
+          do
+              if [[ $f =~ $regex ]]
+              then
+                  name="${BASH_REMATCH[1]}"
+                  echo "${name}"
+              else
+                  echo "$f doesn't match" >&2 # this could get noisy if there are a lot of non-matching files
+              fi
+          done
       
 
       # - uses: actions/checkout@master
