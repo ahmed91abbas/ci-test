@@ -156,11 +156,12 @@ jobs:
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
           echo "::set-output name=files::$FILES"
           echo $FILES
+          echo ${{steps.list_files.outputs.files}}
       - uses: actions/checkout@master
       - name: Lint
         run: |
           echo ${{steps.list_files.outputs.files}}
-          for f in ${{steps.list_files.outputs.files}}; do [ make -C f lint]; done
+        # for f in ${{steps.list_files.outputs.files}}; do [ make -C f lint]; done
         # run: make -C ${{ matrix.image }} lint
       # - name: Test
       #   run: make -C ${{ matrix.image }} test
