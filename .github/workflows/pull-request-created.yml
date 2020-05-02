@@ -155,6 +155,7 @@ jobs:
           URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
           echo "::set-output name=files::$FILES"
+          echo $FILES
       - uses: actions/checkout@master
       - name: Lint
         run: |
