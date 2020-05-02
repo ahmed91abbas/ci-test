@@ -8,8 +8,8 @@ jobs:
     name: Project Specific Checks
     runs-on: ubuntu-latest
     steps:
-      - name: list files
-        id: list_files
+      - name: list changed boxes
+        id: changed_boxes
         run: |
           URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
@@ -22,17 +22,18 @@ jobs:
                   result=$result" "$name
               fi
           done
+          echo $result
           echo "::set-output name=boxes::$result"
       - uses: actions/checkout@master
       - name: Lint
         run: |
-          for box in ${{steps.list_files.outputs.boxes}}
+          for box in ${{steps.changed_boxes.outputs.boxes}}
           do
             make -C $box lint
           done
       - name: Test
         run: |
-          for box in ${{steps.list_files.outputs.boxes}}
+          for box in ${{steps.changed_boxes.outputs.boxes}}
           do
             make -C $box test
           done
