@@ -149,8 +149,6 @@ jobs:
         run: |
           URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
-          echo "::set-output name=files::$FILES"
-          files="box-sum/das box-dsad/das"
           regex="(box-[0-9a-z]*)"
           for f in $FILES
           do
@@ -161,13 +159,13 @@ jobs:
               fi
           done
           echo $result
-      
+          echo "::set-output name=boxes::$result"
 
-      # - uses: actions/checkout@master
-      # - name: Lint
-      #   run: |
-      #     echo ${{steps.list_files.outputs.files}}
-      #     for VARIABLE in ${{steps.list_files.outputs.files}}
-      #     do
-      #       make -C $VARIABLE lint
-      #     done
+      - uses: actions/checkout@master
+      - name: Lint
+        run: |
+          echo ${{steps.list_files.outputs.boxes}}
+          for box in ${{steps.list_files.outputs.boxes}}
+          do
+            make -C $box lint
+          done
