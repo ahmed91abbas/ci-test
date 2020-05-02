@@ -150,23 +150,17 @@ jobs:
           URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
           echo "::set-output name=files::$FILES"
-          for VARIABLE in ${{steps.list_files.outputs.files}}
-          do
-            echo $VARIABLE
-          done
-
-          files="*.jpg"
-          regex="(box-*)/*"
-          for f in $files
+          files="box-sum/das box-dsad/das"
+          regex="(box-[0-9a-z]*)"
+          for f in $FILES
           do
               if [[ $f =~ $regex ]]
               then
                   name="${BASH_REMATCH[1]}"
-                  echo "${name}"
-              else
-                  echo "$f doesn't match" >&2 # this could get noisy if there are a lot of non-matching files
+                  result=$result" "$name
               fi
           done
+          echo $result
       
 
       # - uses: actions/checkout@master
