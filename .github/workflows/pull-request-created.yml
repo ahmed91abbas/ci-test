@@ -154,11 +154,11 @@ jobs:
         run: |
           URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
-          echo "::set-output name=action_fruit::strawberry"
+          echo "::set-output name=files::$FILES"
       - uses: actions/checkout@master
       - name: Lint
         run: |
-          echo ${{steps.list_files.outputs.action_fruit}}
+          echo ${{steps.list_files.outputs.files}}
           for f in ${{steps.list_files.outputs.files}}; do [ make -C f lint]; done
         # run: make -C ${{ matrix.image }} lint
       # - name: Test
