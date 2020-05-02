@@ -8,9 +8,6 @@ jobs:
     name: Project Specific Checks
     runs-on: ubuntu-latest
     steps:
-      - name: branch
-        run: echo ${{ github.head_ref }}
-
       - name: list files
         id: list_files
         run: |
@@ -26,16 +23,13 @@ jobs:
               fi
           done
           echo "::set-output name=boxes::$result"
-
       - uses: actions/checkout@master
-
       - name: Lint
         run: |
           for box in ${{steps.list_files.outputs.boxes}}
           do
             make -C $box lint
           done
-
       - name: Test
         run: |
           for box in ${{steps.list_files.outputs.boxes}}
