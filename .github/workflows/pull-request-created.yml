@@ -160,7 +160,8 @@ jobs:
       - name: Lint
         run: |
           echo ${{steps.list_files.outputs.files}}
-          for f in ${{steps.list_files.outputs.files}}; do [ make -C f lint]; done
+          make -C ${{steps.list_files.outputs.files}} lint
+        # for f in ${{steps.list_files.outputs.files}}; do [ make -C f lint]; done
         # run: make -C ${{ matrix.image }} lint
       # - name: Test
       #   run: make -C ${{ matrix.image }} test
