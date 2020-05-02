@@ -162,7 +162,7 @@ jobs:
           echo ${{steps.list_files.outputs.files}}
           for VARIABLE in ${{steps.list_files.outputs.files}}
           do
-            make -C VARIABLE lint
+            make -C $VARIABLE lint
           done
         # for f in ${{steps.list_files.outputs.files}}; do [ make -C f lint]; done
         # run: make -C ${{ matrix.image }} lint
