@@ -8,10 +8,12 @@ jobs:
     name: Project Specific Checks
     runs-on: ubuntu-latest
     steps:
+      - name: branch
+        run: echo ${{ github.head_ref }}
+
       - name: list files
         id: list_files
         run: |
-          echo ${{ github.head_ref }}
           URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
           FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
           regex="(box-[0-9a-z]*)"
@@ -26,12 +28,14 @@ jobs:
           echo "::set-output name=boxes::$result"
 
       - uses: actions/checkout@master
+
       - name: Lint
         run: |
           for box in ${{steps.list_files.outputs.boxes}}
           do
             make -C $box lint
           done
+
       - name: Test
         run: |
           for box in ${{steps.list_files.outputs.boxes}}
