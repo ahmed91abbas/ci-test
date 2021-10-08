@@ -15,4 +15,12 @@ jobs:
   hello:
     runs-on: ubuntu-latest
     steps:
-    - run: echo hello
+    - uses: actions/checkout@master
+      with:
+          fetch-depth: 0
+    - id: info
+      run: |
+        git_hash=$(git rev-parse --short "$GITHUB_SHA")
+        git_branch=${GITHUB_REF#refs/heads/}
+        echo $git_hash
+        echo $git_branch
