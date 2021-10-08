@@ -24,5 +24,5 @@ jobs:
         git_branch=${GITHUB_REF#refs/heads/}
         echo $git_hash
         echo $git_branch
-    - id: echo-first-test
-      run: echo "first test"
+    - id: echo-second-test
+      run: echo "second test"
